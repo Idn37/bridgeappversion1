@@ -1,24 +1,83 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Daily Pulse App</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Pulse | Bridge</title>
     <style>
-        body { font-family: sans-serif; text-align: center; background: #f4f4f4; }
-        .app-container { max-width: 400px; margin: auto; background: white; height: 90vh; border-radius: 20px; padding: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .slide-box { background: #eee; height: 200px; display: flex; align-items: center; justify-content: center; margin: 20px 0; border-radius: 10px; }
-        .ready-btn { background: #28a745; color: white; border: none; padding: 15px 30px; font-size: 18px; border-radius: 50px; cursor: pointer; }
-        .streak { color: #ff4500; font-weight: bold; }
+        :root {
+            --primary: #007AFF; /* Base44 Blue */
+            --bg: #F2F2F7;
+            --card: #FFFFFF;
+            --text: #1C1C1E;
+        }
+        body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg); color: var(--text); margin: 0; display: flex; justify-content: center; }
+        
+        /* App Container */
+        .app-shell { width: 100%; max-width: 450px; height: 100vh; background: var(--card); display: flex; flex-direction: column; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
+
+        /* Header */
+        header { padding: 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #E5E5EA; }
+        .logo { font-weight: 800; font-size: 1.2rem; letter-spacing: -1px; }
+        .streak-pill { background: #FFF0E6; color: #FF9500; padding: 4px 12px; border-radius: 20px; font-size: 0.9rem; font-weight: 600; }
+
+        /* Summary Deck Area */
+        .deck-container { flex: 1; padding: 20px; display: flex; flex-direction: column; justify-content: center; }
+        .card { background: var(--bg); border-radius: 16px; padding: 30px; min-height: 300px; display: flex; align-items: center; text-align: center; font-size: 1.1rem; line-height: 1.6; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); }
+
+        /* Progress Bar */
+        .progress-bar { height: 4px; background: #E5E5EA; margin-bottom: 20px; border-radius: 2px; overflow: hidden; }
+        .progress-fill { width: 33%; height: 100%; background: var(--primary); transition: width 0.3s; }
+
+        /* Bottom Controls */
+        footer { padding: 20px; border-top: 1px solid #E5E5EA; }
+        .btn-ready { width: 100%; background: var(--primary); color: white; border: none; padding: 18px; border-radius: 12px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: opacity 0.2s; }
+        .btn-ready:active { opacity: 0.8; }
+        .nav-links { display: flex; justify-content: space-between; margin-top: 15px; color: var(--primary); font-size: 0.9rem; font-weight: 500; cursor: pointer; }
     </style>
 </head>
 <body>
-    <div class="app-container">
-        <h1>Daily Pulse</h1>
-        <p class="streak">🔥 5 Day Streak</p>
-        <div class="slide-box">
-            <p>Slide 1: Remember to check ground points!</p>
+
+<div class="app-shell">
+    <header>
+        <div class="logo">BRIDGE</div>
+        <div class="streak-pill">🔥 5 Days</div>
+    </header>
+
+    <div class="deck-container">
+        <div class="progress-bar"><div class="progress-fill"></div></div>
+        <div class="card" id="deck-card">
+            "Welcome to today's session. Slide 1: Review the 3 ground points for customer safety."
         </div>
-        <button class="ready-btn" onclick="alert('You are ready for the shift!')">MARK AS READY</button>
-        <p style="margin-top: 50px; color: gray;">Voice-to-Vault coming soon...</p>
+        <div class="nav-links">
+            <span onclick="prevSlide()">← Back</span>
+            <span onclick="nextSlide()">Next →</span>
+        </div>
     </div>
+
+    <footer>
+        <button class="btn-ready" onclick="completeBrief()">MARK AS READY</button>
+    </footer>
+</div>
+
+<script>
+    let currentStep = 1;
+    const totalSteps = 3;
+    const content = [
+        "Review the 3 ground points for customer safety.",
+        "Check all equipment is sanitized and ready.",
+        "Final Reminder: Smiles are mandatory today!"
+    ];
+
+    function updateUI() {
+        document.getElementById('deck-card').innerText = content[currentStep - 1];
+        document.querySelector('.progress-fill').style.width = (currentStep / totalSteps * 100) + "%";
+    }
+
+    function nextSlide() { if(currentStep < totalSteps) { currentStep++; updateUI(); } }
+    function prevSlide() { if(currentStep > 1) { currentStep--; updateUI(); } }
+    function completeBrief() { alert("Ready logged! Streak updated."); }
+</script>
+
 </body>
 </html>
